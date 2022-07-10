@@ -1,3 +1,13 @@
+(defun enhanced-scroll-up ()
+  (interactive)
+  (scroll-up)
+  (move-to-window-line nil))
+
+(defun enhanced-scroll-down ()
+  (interactive)
+  (scroll-down)
+  (move-to-window-line nil))
+
 (defun meow-setup ()
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
   ;; (meow-define-keys 'insert '("C-[" . meow-insert-exit))
@@ -6,14 +16,8 @@
 				    '("<escape>" . ignore))
   (meow-leader-define-key
    ;; SPC j/k will run the original command in MOTION state.
-   '("k" . (lambda ()
-	     (interactive)
-	     (scroll-down)
-	     (move-to-window-line nil)))
-   '("j" . (lambda ()
-	     (interactive)
-	     (scroll-up)
-	     (move-to-window-line nil)))
+   '("k" . enhanced-scroll-down)
+   '("j" . enhanced-scroll-up)
    ;; Use SPC (0-9) for digit arguments.
    '("1" . meow-digit-argument)
    '("2" . meow-digit-argument)
