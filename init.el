@@ -127,7 +127,7 @@
 
 (use-package
   emacs
-  :init (cond ((eq system-type 'darwin)
+  :config (cond ((eq system-type 'darwin)
                ;; MacOS-specific code goes here.
 	       (set-face-attribute 'default nil :height 150))
 	      ((eq system-type 'gnu/linux)
@@ -139,9 +139,11 @@
   (scroll-bar-mode -1)
   (electric-pair-mode)
   (hl-line-mode)
+  (add-to-list 'auto-mode-alist '("\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'"
+				  . enh-ruby-mode))
   (setq inhibit-startup-screen t gc-cons-threshold 100000000 straight-use-package-by-default t
 	make-backup-file-name-function 'my-backup-file-name enable-recursive-minibuffers t
-	next-line-add-newlines t visible-bell nil custom-safe-themes t ring-bell-function 'ignore))
+	visible-bell nil custom-safe-themes t ring-bell-function 'ignore))
 
 (use-package
   general
@@ -153,10 +155,12 @@
 
 (use-package
     rainbow-delimiters
-  :hook (emacs-lisp-mode . rainbow-delimiters-mode))
+    :hook
+    (clojure-mode . rainbow-delimiters-mode)
+    (emacs-lisp-mode . rainbow-delimiters-mode))
 
-(use-package 
-  which-key 
+(use-package
+  which-key
   :config (which-key-mode))
 
 (use-package
@@ -330,7 +334,35 @@
   (meow-setup)
   (meow-global-mode))
 
-(use-package multi-vterm)
+(use-package
+  multi-vterm)
+
+(use-package
+  cider
+  :hook
+  (clojure-mode . lsp)
+  (clojurescript-mode . lsp)
+  (clojurec-mode . lsp))
+
+(use-package
+  yard-mode)
+
+(use-package
+  enh-ruby-mode
+  :hook
+  (enh-ruby-mode . (lambda ()
+		     (lsp)
+		     (yard-mode))))
+
+(use-package
+  ruby-end
+  :hook
+  (enh-ruby-mode . ruby-end-mode))
+
+(use-package
+  inf-ruby
+  :hook
+  (enh-ruby-mode . inf-ruby-minor-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
